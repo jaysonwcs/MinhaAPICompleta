@@ -23,7 +23,20 @@ namespace DevIO.Api.Controllers
 
         protected ActionResult CustomResponse(object result = null)
         {
+            if (OperacaoValida())
+            {
+                return Ok(new
+                {
+                    success = true,
+                    data = result
+                });
+            }
 
+            return BadRequest(new
+            {
+                success = false,
+                errors = _notificador.ObterNotificacoes().Select(n => n.Mensagem)
+            });
         }
 
         protected ActionResult CustomResponse(ModelStateDictionary modelState)
